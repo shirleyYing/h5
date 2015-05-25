@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>坐标点位置获取测试</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+    <div  style='border:solid 4px #f00;width:100px;height:100px;position: relative'>
+    	<button id='layerX'>button</button>
+    </div>
+    <div  style='border:solid 4px #f00;width:100px;height:100px'>
+    	<button id='layerX_noborder'>button</button>
+    </div>
+    <div  style='border:solid 4px #f00;width:100px;height:100px'>
+    	<button id='client'>button</button>
+    </div>
+    <div >
+    	
+
+    	1.JavaScript hoisting
+
+ 
+
+>>请看例子，我们拿Chrome的console作为JS的运行环境。
+
+
+
+上面直接执行console.log(a), 不带一点悬念地抛出了not defined 错误。这是预料之中的。
+
+看下面进化后的代码：
+
+
+
+之前变量没有定义的错误没了，取而代之的是告诉我们a的值是 'undefined'。先不管a的值缘何为 'undefined' 了，至少可以知道现a这个变量是定义了，因为之前报的' a is not defined'的错误没有了。
+
+这正是因为JavaScript 中的一个声明提前的特性起的作用。
+
+JavaScript中可以提前使用在后面语句中声明的变量，这种特性叫被国外某网友(ben cherry)称为Hoisting （非官方术语） 。 可以理解为将变量的声明提前了，所以在变量声明前使用变量不会报错。而且这一特性不仅限于变量名，对于函数的声明也是同样的效果。
+
+
+
+第一次对函数foo()的调用同样报 'not defined' 错误。这是合情合理同时是合法的。因为从头到尾就没有定义这么一个叫作foo() 的东西。
+
+之后将函数调用写在最前面，但函数的定义我们写在了之后。
+
+ 
+
+>> 再来看上面对a的输出值为'undefined'的问题。
+
+
+
+这里需要深入理解Hoisting这一特性。它的提前只是将声明提前，而对变量的赋值并没有跟着提前。这点很关键。也就是为什么我们可以在第一句使用变量a但它的值却是 'undefined'。 JavaScript里面声明了但还未赋值的变量其值默认便是 'undefined'。
+
+ 
+
+按照Hoisting来解释，最终生成的等价代码其实差不多应该就是这样的：
+1.JavaScript hoisting
+
+ 
+
+>>请看例子，我们拿Chrome的console作为JS的运行环境。
+
+
+
+上面直接执行console.log(a), 不带一点悬念地抛出了not defined 错误。这是预料之中的。
+
+看下面进化后的代码：
+
+
+
+之前变量没有定义的错误没了，取而代之的是告诉我们a的值是 'undefined'。先不管a的值缘何为 'undefined' 了，至少可以知道现a这个变量是定义了，因为之前报的' a is not defined'的错误没有了。
+
+这正是因为JavaScript 中的一个声明提前的特性起的作用。
+
+JavaScript中可以提前使用在后面语句中声明的变量，这种特性叫被国外某网友(ben cherry)称为Hoisting （非官方术语） 。 可以理解为将变量的声明提前了，所以在变量声明前使用变量不会报错。而且这一特性不仅限于变量名，对于函数的声明也是同样的效果。
+
+
+
+第一次对函数foo()的调用同样报 'not defined' 错误。这是合情合理同时是合法的。因为从头到尾就没有定义这么一个叫作foo() 的东西。
+
+之后将函数调用写在最前面，但函数的定义我们写在了之后。
+
+ 
+
+>> 再来看上面对a的输出值为'undefined'的问题。
+
+
+
+这里需要深入理解Hoisting这一特性。它的提前只是将声明提前，而对变量的赋值并没有跟着提前。这点很关键。也就是为什么我们可以在第一句使用变量a但它的值却是 'undefined'。 JavaScript里面声明了但还未赋值的变量其值默认便是 'undefined'。
+
+ 
+
+按照Hoisting来解释，最终生成的等价代码其实差不多应该就是这样的：
+
+    </div>
+    <script>
+    // document.onclick=function(ev){
+    // 	var event=window.event||ev;
+    // 	console.log("pageX: "+event.pageX);
+    // 	console.log("pageY: "+event.pageY);
+    // 	alert("pageY: "+event.pageY);
+    // 	alert("clientY: "+event.clientY);    	
+    // }
+    document.getElementById('layerX').onclick=function(ev){
+    	var event=window.event||ev;
+    	console.log('border  layerX');
+    	console.log("layerX: "+event.pageX);
+    	console.log("layerX: "+event.pageY);
+    	alert("layerX: "+event.pageX);
+    	alert("layerY: "+event.pageY); 
+    	alert("offsetLeftX: "+this.offsetLeftLeft);
+    	alert("offsetLeftY: "+this.offsetLeftTop);    	
+    }
+    document.getElementById('layerX_noborder').onclick=function(ev){
+    	var event=window.event||ev;
+    	console.log('border  layerX');
+    	console.log("layerX: "+event.pageX);
+    	console.log("layerX: "+event.pageY);
+     	alert("clientX: "+event.pageX);
+    	alert("clientY: "+event.pageY);    	
+   }
+      document.getElementById('client').onclick=function(ev){
+    	var event=window.event||ev;
+    	alert('firefox');
+    	console.log('firefox');
+    	alert("clientX: "+event.clientX);
+    	alert("clientY: "+event.clientY);    	
+    	console.log("clientX: "+event.clientX);
+    	console.log("clinetY: "+event.clientY);
+    }
+    </script>
+</body>
+</html>

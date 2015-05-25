@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>canvas-太阳系</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+    <canvas id='canvas' width='1000' height='1000' style='background-color: #000'>
+    	此浏览器不支持canvas 标签
+    </canvas>
+    <script>
+    var canvas=document.getElementById('canvas');
+    var cxt=canvas.getContext('2d');
+    var time=0;
+/*    var draw=function(){
+    	cxt.clearRect(0,0,1000,1000);
+    	//画轨道
+    	cxt.lineWidth=3;
+	    cxt.strokeStyle='#fff';
+	    cxt.beginPath();
+	    cxt.arc(500,500,100,0,360,false);
+	    cxt.closePath();
+	    cxt.stroke();
+	    //太阳 用径向渐变填充颜色
+	    //cxt.save();
+	    cxt.beginPath();
+	    cxt.arc(500,500,20,0,360,false);
+	    cxt.closePath();
+	    //径向渐变方法creatRadialGradient(x,y,radius,x,y,radius)
+	    var sunColor=cxt.createRadialGradient(500,500,0,500,500,20);//createRadialGradient
+	    sunColor.addColorStop(0,'#f00')//圆心的颜色
+	    sunColor.addColorStop(1,'#FF7F00')//外围的颜色
+	    cxt.fillStyle=sunColor;
+	    cxt.fill();
+	    //cxt.restore();
+
+	    //地球
+	    cxt.save();
+	    cxt.translate(500,500);
+	    cxt.rotate(timeCurrent*365/360*Math.PI/180);
+	    cxt.beginPath();
+	    cxt.arc(0,100,10,0,360,false);
+	    cxt.closePath();
+	    var earthColor=cxt.createRadialGradient(0,100,0,0,100,10);
+	    earthColor.addColorStop(0,'#78B1E8');
+	    earthColor.addColorStop(1,'#050C12');
+		cxt.fillStyle=earthColor;
+	    cxt.fill();
+	    cxt.restore();
+	    timeCurrent+=1;
+    }
+	   var timer=setInterval(draw,100);*/
+	   var drawTrack=function(){
+	   		for(var i=0;i<8;i++){
+				cxt.lineWidth=3;
+			    cxt.strokeStyle='#fff';
+			    cxt.beginPath();
+			    cxt.arc(500,500,(i*50+50),0,360,false);
+			    cxt.closePath();
+			    cxt.stroke();
+	   		}
+	   }
+	   drawTrack();
+	   var Star=function(x,y,radius,cycle,scolor,ecolor){
+	   		this.x=x;
+	   		this.y=y;
+	   		this.radius=radius;
+	   		this.scolor=scolor;
+	   		this.ecolor=ecolor;
+	   		this.cycle=cycle;
+			this.time=0;
+			this.draw=function(){
+				cxt.save();
+				cxt.translate(500,500);//设置原点
+				cxt.rotate(this.time*(360/this.cycle)*Math.PI/180);//设置旋转角度
+				//画圆
+				cxt.beginPath();
+				cxt.arc(this.x,this.y,this.radius,0,360,false);
+				cxt.closePath();
+				//填充
+				this.color=cxt.createRadialGradient(this.x,this.y,0,this.x,this.y,this.radius);
+				this.color.addColorStop(0,scolor);
+				this.color.addColorStop(1,ecolor);
+				cxt.fillStyle=this.color;
+				cxt.fill();
+
+				cxt.restore();
+				this.time+=1;
+			}
+			
+	   }
+	   		var Sun=function(){
+			Star.call(this,0,0,20,0,"#F00","#f90");
+			}	   		
+		//创建一个水星的对象构造方法
+			function Mercury(){
+				Star.call(this,0,-50,10,87.70,"#A69697","#5C3E40");
+			}
+			//创建一个金星的对象构造方法
+			function Venus(){
+				Star.call(this,0,-100,10,224.701,"#C4BBAC","#1F1315");
+			}
+			//创建一个地球的对象构造方法
+			function Earth(){
+				Star.call(this,0,-150,10,365.224,"#78B1E8","#050C12");
+			}
+			//创建一个火星的对象构造方法
+			function Mars(){
+				Star.call(this,0,-200,10,686.98,"#CEC9B6","#76422D");
+			}
+			//创建一个木星的对象构造方法
+			function Jupiter(){
+				Star.call(this,0,-250,10,4332.589,"#C0A48E","#322222");
+			}
+			//创建一个土星的对象构造方法
+			function Saturn(){
+				Star.call(this,0,-300,10,10759.5,"#F7F9E3","#5C4533");
+			}
+			
+			//创建一个天王星的对象构造方法
+			function Uranus(){
+				Star.call(this,0,-350,10,30799.095,"#A7E1E5","#19243A");
+			}
+			//创建一个天王星的对象构造方法
+			function Neptune(){
+				Star.call(this,0,-400,10,60152,"#0661B2","#1E3B73");
+			}
+			
+			
+			
+			//创建太阳对象实例
+			var sun=new Sun();
+			//创建水星对象实例
+			var water=new Mercury();
+			//创建金星对象实例
+			var gold=new Venus();
+			//创建一个地球对象实例
+			var diqiu=new Earth();
+			//创建一个火星对象实例
+			var fire=new Mars();
+			//创建一个木星对象实例
+			var wood=new Jupiter();
+			//创建一个土星对象实例
+			var soil=new Saturn();
+			//创建一个天王星对象实例
+			var god=new Uranus();
+			//创建一个海王星对象实例
+			var sea=new Neptune();
+
+			var move=function(){
+				cxt.clearRect(0,0,1000,1000);
+				drawTrack();
+				sun.draw();
+				water.draw();
+				gold.draw();
+				diqiu.draw();
+				fire.draw();
+				wood.draw();
+				soil.draw();
+				god.draw();
+				sea.draw();			
+			}
+			setInterval(move,20);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>canvas</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+    <canvas width='500' height='800' id='canvas' style='background-color: yellow'>
+    	当前页面不支持canvas属性(只有不支持的时候才显示此内容)
+    </canvas>
+    
+    <script>
+    	var canvas=document.getElementById('canvas');
+    	var cxt=canvas.getContext('2d');
+    	//画一条线段
+    	cxt.beginPath();
+    	cxt.lineWidth=10;
+    	cxt.strokeStyle='#ff0099';
+    	cxt.moveTo(20,20);
+    	cxt.lineTo(100,20);
+    	cxt.stroke();
+    	cxt.closePath();
+    	//画一个圆
+    	cxt.beginPath();
+    	cxt.lineWidth=4;
+    	cxt.strokeStyle='#33aa99';
+    	//cxt.arc(x,y,raduis,开始弧度，结束弧度，是否逆时针);
+    	cxt.arc(100,100,50,0,Math.PI*2,false);
+    	cxt.stroke();
+    	cxt.closePath();
+    	//实心圆
+    	cxt.beginPath();
+    	cxt.lineWidth=10;
+    	cxt.fillStyle='rgb(255,0,0)';
+    	cxt.strokeStyle='#00aa99';
+    	//cxt.arc(x,y,raduis,开始弧度，结束弧度，是否逆时针);
+    	cxt.arc(300,100,50,0,Math.PI*2,false);
+    	cxt.fill();//填充内部。
+    	cxt.stroke();//描绘边缘
+    	cxt.closePath();
+    	//矩形
+    	cxt.beginPath();
+    	//（x,y,长，宽）
+    	cxt.rect(80,200,100,100);
+    	cxt.lineWidth=1;
+    	cxt.strokeStyle='#330099';//如果不写这两句就会沿用之前的线宽和笔触颜色
+    	cxt.stroke();
+    	cxt.closePath();
+
+        cxt.strokeRect(80,350,50,50);
+
+        cxt.fillRect(180,350,50,50);
+        
+        cxt.font='40px 宋体';
+        cxt.fillText('cancas lalala',90,400);
+
+        cxt.strokeText('cancas lalala',90,500);
+        //插入图片
+        var img=new Image();
+        img.src='xiaomm.jpg';
+        cxt.drawImage(img,80,550,100,100); 
+    </script>
+</body>
+</html>

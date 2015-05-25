@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>vedio</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+    <video id='moive' width='400px' height='300px' controls autoplay oncanplay='startVideo()' onended='stopTimeLine()' autoBuffer='true'>
+    	<source src='vedio/song.mp4'>
+    </video>
+    <canvas id='frame' width='400px' height='300px'>
+    	your browser can't support canvas
+    </canvas>
+    <script type="text/javascript">
+//设置抓取帧的时间间隔
+		var updateInterval=2000;
+		var frameWidth=100;
+		var frameHeight=75;
+		var rows=4;
+		var cols=4;
+		var frameGrid=rows*cols;
+		var frameCount=0;
+		var vedioStarted=false;
+		var IntervalId;
+    	function startVideo(){
+    		if(vedioStarted){
+    			return;
+    		}
+    		vedioStarted=true;
+    		//updateFrame();
+    		IntervalId=setInterval(updateFrame,updateInterval);
+  //查看某一帧时的处理过程
+  			var timeLine=document.getElementById('frame');
+  			timeLine.onclick=function(ev){
+  				var event=window.event||ev;
+  				var offX=event.pageX-timeLine.offsetLeft;
+  				var offY=event.pageY-timeLine.offsetTop;console.log("offx: "+offX+"	offY: "+offY);
+  				var clickedFrame=Math.floor(offY/frameHeight)*rows+Math.floor(offX/frameWidth)+1;
+  				var seekFrame=Math.floor(frameCount/frameGrid)*frameGrid+clickedFrame;
+  				console.log(frameCount);
+    			var moive=document.getElementById('moive');
+  				moive.currentTime=seekFrame*updateInterval/1000;
+  				frameCount=seekFrame;
+  				console.log(frameCount);
+  			}
+    	}
+    	function updateFrame(){
+    		var moive=document.getElementById('moive');
+    		//console.log(moive);
+    		var timeLine=document.getElementById('frame');
+    		var ctx=timeLine.getContext('2d');
+    		//console.log(ctx);
+    		var frameX=(frameCount%frameGrid%cols)*frameWidth;
+    		var frameY=Math.floor(frameCount%frameGrid/rows)*frameHeight;
+    		ctx.drawImage(moive,0,0,400,300,frameX,frameY,frameWidth,frameHeight);
+    		frameCount++;
+    	}
+    	function stopTimeLine(){
+    		clearInterval(IntervalId);
+    	}
+    </script>
+</body> 	
+</html>

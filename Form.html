@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Form</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+	<header>html 5 表单实例 </header>
+	<div id='container'>
+	    <form id='register'>
+			<p>
+				<label for='runnerName'>name：</label>
+				<input type='text' name='runnerName' id='runnerName' placeholder="填写姓名" required/>	  	
+			</p>
+			<p>
+				<label for='phone'>tel:</label>
+				<input type='tel' name='phone' id='phone' placeholder='(xxx)xxx-xxx-xxx' />
+			</p>
+			<p>
+				<label for='addressemail'>addressemail:</label>
+				<input type='email' name='addressemail' id='addressemail' placeholder='123@sina.cn' />				
+			</p>
+			<p>
+				<label for='dob'>dob:</label>
+				<input name='dob' id='dob' type='date' />
+			</p>
+
+			<fieldset>
+				<legend>T-shirt Size</legend>
+				<p><input type='radio' name='size' id='s' />
+				<label for='s'>s</label></p>
+				<p><input type='radio' name='size' id='m'/>
+				<label for='m'>m</label></p>
+				<p><input type="radio" name='size' id='l'>
+				<label for='l'>l</label></p>
+			</fieldset>
+			
+			<p>	
+				<label for='style'> T-shirt style</label>
+				<input name='style' id='style' type='text' list='stylelist' title='由下拉列表选取衣服风格' >	
+				<datalist id='stylelist'>
+					<option value='white' label='1st Year'>
+					<option value='Gray' label='2st~4st Year'>
+					<option value='Navy' label='5st Year'>
+				</datalist>
+			</p>
+
+			<fieldset>
+				<legend>Exception:</legend>
+				<p><label for='confidence'>Confidence:</label>
+				<input type='range' name='level' id='confidence' onchange="confidenceDisplay.value=(value+'%')" value='0' max='100' min='0' step='10'></p>
+				<output id='confidenceDisplay'></output>
+			</fieldset>
+			<p>
+				<input type='submit' value='submit'/>
+			</p>
+	    </form>
+    </div>
+    <script>
+    		function invalidHandler(evt){
+    			var label=evt.target.parentElement.getElementsByTagName('label')[0];
+    			var validity=evt.target.validity;
+    			alert(evt.target);
+    			alert(evt.srcElement);
+    			console.log(validity.valueMissing);
+    			if(validity.valueMissing){
+    				evt.target.setCustomValidity('error');
+    				//alert('error');
+    			}else{
+    				evt.target.setCustomValidity('');    				
+    			}
+    			console.log(evt.target);
+    		
+    			label.style.color='red';
+    			evt.stopPropagation();//阻止事件冒泡
+    			//evt.preventDefault();
+    		}
+    		window.onload=function(){
+    			var register=document.getElementById('register');
+    			register.addEventListener('invalid',invalidHandler,true);
+    			
+    		}
+    </script>
+</body>
+</html>

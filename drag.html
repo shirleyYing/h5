@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>drag</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+	<style>
+		#member li{
+			cursor:move;
+		}
+		.highlighted{
+			background-color: #ff0;
+		}
+		.validtarget{
+			background-color: #f00;
+		}
+		.log{
+			background-color: #fa0;
+			border: solid 5px #f00;
+		}
+	</style>
+<body>
+    <p> drag these member to racer or volunteer list</p>
+    <ul id='member'>
+    	<li draggable='true'>zhangying</li>
+    	<li draggable='true'>luoqin</li>
+    	<li draggable='true'>lyy</li>
+    	<li draggable='true'>hongchun</li>
+    	<li draggable='true'>jiaojiao</li>
+    	<li draggable='true'>xiaohui</li>
+    </ul>
+	<div class='droplist'>
+		<fieldset id='racerField'>
+			<legend>Racer:</legend>
+			<ul id='racers'>
+				<li>添加到这里</li>
+			</ul>
+		</fieldset>
+	</div>
+	<div class='droplist'>
+		<fieldset id='volunteerField'>
+			<legend>volunteers:</legend>
+			<ul id='volunteers'>
+				<li>添加到这里</li>
+			</ul>
+		</fieldset>
+	</div>
+</body>
+	<script>
+		window.onload=function(){
+//放名字
+			var racers=[];
+			var volunteers=[];
+			var deldom=null;
+			var members=document.querySelectorAll('#member li');
+			//给事件源绑定拖放开始结束时间
+			// members是NodeList对象，不是数组。
+			[].forEach.call(members,function(member) {
+				member.addEventListener('dragstart',handleDragStart,false);
+				member.addEventListener('dragend',handleDragEnd,false);
+			});
+			//给目标对象绑定事件
+			var racersList=document.getElementById('racers');
+			var volunteersList=document.getElementById('volunteers');
+			var list=[racersList,volunteersList];
+			list.forEach(function(item) {
+				item.addEventListener('dragenter',handleDragEnter,false);
+				item.addEventListener('dragleave',handleDragLeave,false);
+				item.addEventListener('drop',handleDrop,false);
+			})
+			racersList.addEventListener('dragover',handleDragOver,false);
+			volunteersList.addEventListener('dragover',handleDragOver,false);
+			//给目标事件边框绑定事件
+			var volunteerField=document.querySelector('#volunteerField');
+			var racerField=document.querySelector('#racerField');
+			var fields=[volunteerField,racerField];
+			[].forEach.call(fields,function(field) {
+				field.addEventListener('dragover',handleDragOverOut,false);
+			});
+			function handleDragStart(ev){console.log('start');
+				ev.effectAllowed='move';
+				ev.dataTransfer.setData('text/plain',ev.target.textContent);
+				document.getElementById('racerField').className='validtarget';
+				document.getElementById('volunteerField').className='validtarget';
+				deldom=ev.target;
+				return true;
+			}
+			function handleDragEnter(ev){
+				console.log('enter');
+				ev.preventDefault();//告诉浏览器当前目标是有效的放置目标。默认是无效的
+				ev.stopPropagation();
+				return false;
+			}
+			function handleDragLeave(ev){
+				ev.target.className='';
+				return false;				
+			}
+			function handleDragOverOut(ev){
+				if(ev.target.id=='racerField'){
+				   ev.target.className='log';
+				}else if(ev.target.id=='volunteerField'){
+				   ev.target.className='log';
+				}
+				ev.stopPropagation();
+				return false;
+			}
+			function handleDragOver(ev){
+				console.log('overlist');
+				ev.dataTransfer.dropEffect='move';
+				ev.stopPropagation();
+				ev.preventDefault();
+				ev.target.parentNode.className='highlighted';
+				return false;
+			}
+			function handleDrop(ev){
+				
+				ev.stopPropagation();
+				ev.preventDefault();
+				var dropTarget=ev.target;
+				var text= ev.dataTransfer.getData('text/plain');
+				var group=volunteers;
+				var list=volunteersList;
+				if(dropTarget.parentNode.id!='volunteers'){
+					group=racers;
+					list=racersList;
+				}
+				if(text!=null && '' !=text){
+					group.push(text);
+					group.sort();		
+					list.innerHTML='';
+					group.forEach(function(text) {
+					var li=document.createElement('li');
+					li.textContent=text;
+					list.appendChild(li);
+					});
+					
+					[].forEach.call(members,function(member) {
+						
+						if(text==member.textContent){
+							member.parentNode.removeChild(member);
+				
+						}
+					});
+					if(deldom){
+						deldom.parentNode.removeChild(deldom);
+					}
+				}
+				return false;
+			}
+			function handleDragEnd(ev){
+				racersList.className=null;
+				volunteersList.className=null;
+				racersList.parentNode.className=null;
+				volunteersList.parentNode.className=null;
+			}
+		}
+	</script>
+</html>

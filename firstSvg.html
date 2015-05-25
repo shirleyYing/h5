@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+
+<title>SVG</title>
+
+
+<style>
+	svg{
+		border:solid 1px #8E1D1D;
+	}	
+	g[id=Tree]:hover  {
+    opacity: 0.9;
+    cursor: crosshair;
+  	}
+</style>
+
+	<div >
+		<button id='addTreeButton'>addTree</button>
+	</div>
+	<svg width='400' height='600'>
+		<defs>
+			<!-- 碎石纹理 -->
+			<pattern id='gravelPattern' patternUnits='userSpaceOnUse' x='0' y= '0' height='67' width='100' viewBox='0 0 100 67'>
+				<image x=0 y=0 width=100 height=67 xlink:href='gravel.jpg'></image>
+			</pattern>
+			
+			<linearGradient id='TrunkGradient'>
+				<stop offset="0%" stop-color="#663300" />
+		        <stop offset="40%" stop-color="#996600" />
+		        <stop offset="100%" stop-color="#552200" />
+			</linearGradient>
+
+			<rect  id ='Trunk' x='-5' y='-50' width=10 height=50  />
+			
+
+			<path d='M-25, -50  
+		            L-10, -80  
+		            L-20, -80  
+		            L-5, -110
+		            L-15,-110
+		            L0, -140
+					L15, -110
+					L5,-110
+					L20,-80
+					L10,-80
+					L25,-50
+					 Z ' id="Canopy"/>
+	 			<linearGradient id='CanopyShadow'x=0 x=0 x2=0 y2=100%> 
+					<stop offset='0%' stop-color='#000' stop-opacity='.5'/>
+					<stop offset='20%' stop-color='#000'stop-opacity='0'/> 				
+	 			</linearGradient> 
+			<g id="Tree">
+		      <use xlink:href="#Trunk" fill="url(#TrunkGradient)" />
+		      <use xlink:href="#Trunk" fill="url(#CanopyShadow)" />
+		      <use xlink:href="#Canopy" fill="none" stroke="#663300"
+		         stroke-linejoin="round" stroke-width="4px" />
+		      <use xlink:href="#Canopy" fill="#339900" stroke="none" />
+		    </g>
+
+    </g>
+ 		</defs>
+		<g transform='translate(-10,350)'
+			stroke-width='14px'
+			stroke-linejoin='round'
+			stroke='url(#gravelPattern)'>
+			<!-- ，区分横纵轴，老外果然奇葩 同（M0,0 Q170-50, 260 -190 ）写法一样，这是坐标点写法-->
+ 			<path d="M0,0 Q170,-50 260, -190 Q310, -250 410,-250"
+          fill="none" />		
+        </g>
+        <text x=200 y=60 font-size='60px' font-fimaly='impact' fill='#996600'text-anchor='middle'>
+    		 Happy Trails!    	
+        </text>
+        <text x=200 y=90 font-size='20px' font-fimaly='impact' fill='#996600'text-anchor='middle' id='treeCounter'>
+    		     	
+        </text>
+        <text x=20 y=520 font-size='20px' font-fimaly='impact' fill='#996600'text-anchor='left'>
+        	<tspan>you can move a tree by </tspan>
+        	<tspan x=20 y=540> clicking on it</tspan>
+        </text>
+	    <use xlink:href="#Tree" transform="translate(130,250)" />
+	    <use xlink:href="#Tree" transform="translate(260, 500) scale(2)" />
+	    <use xlink:href="#Tree" transform="translate(390, 500) scale(2)" />
+
+	</svg>
+	<script type="text/javascript">
+		var button=document.getElementById('addTreeButton');
+		function removeTree(e) {
+		    var elt = e.target;
+		    if (elt.correspondingUseElement) {
+		      elt = elt.correspondingUseElement;
+		    }
+		    elt.parentNode.removeChild(elt);
+		    updateTree();
+	    }
+		button.onclick=function(){
+			
+		var x = Math.floor(Math.random() * 400);
+	    var y = Math.floor(Math.random() * 600);
+	    var scale = Math.random() + .5;
+	    var translate = "translate(" +x+ "," +y+ ") ";
+	    var tree=document.createElementNS("http:www.w3.org/2000/svg","use");
+	    //var tree = document.createElementNS("http://www.w3.org/2000/svg", "use");
+	    tree.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#Tree");
+	    tree.setAttribute("transform", translate + "scale(" + scale + ")");
+	    document.querySelector("svg").appendChild(tree);
+	    tree.onclick = removeTree;
+	    updateTree();
+
+		}
+		var counter=document.getElementById('treeCounter'); 
+		var updateTree=function(){
+			var num=0;
+			var list=document.querySelectorAll('use');
+			for(var i=0;i<list.length;i++){
+				if(list[i].getAttribute('xlink:href')=='#Tree'){
+					num++;
+					list[i].onclick=removeTree;
+				}
+			}
+			counter.innerHTML='there are '+num+'trees';
+		}
+		updateTree();
+	</script>
